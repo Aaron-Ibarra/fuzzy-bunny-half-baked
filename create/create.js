@@ -5,6 +5,7 @@ const logoutButton = document.getElementById('logout');
 
 form.addEventListener('submit', async (e) => {
     // prevent default
+    e.preventDefault();
 
     // get the name and family id from the form
 

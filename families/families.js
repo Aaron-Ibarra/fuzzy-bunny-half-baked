@@ -14,17 +14,23 @@ async function displayFamilies() {
     // fetch families from supabase
     const families = await getFamilies();
     // clear out the familiesEl
-    familiesEl.innerHtml = '';
+    familiesEl.textContent = '';
     // loop through each family and for each family:
     for (let family of families) {
-        console.log(family);
         const familyEl = renderFamily(family);
         const bunniesEl = document.createElement('div');
+
         bunniesEl.classList.add('bunnies');
+
         for (let bunny of family.fuzzy_bunnies) {
             const bunnyEl = document.createElement('div');
             bunnyEl.classList.add('bunny');
             bunnyEl.textContent = bunny.name;
+
+            bunnyEl.addEventListener('click', async () => {
+                await deleteBunny(bunny.id);
+                displayFamilies();
+            });
 
             bunniesEl.append(bunnyEl);
         }
