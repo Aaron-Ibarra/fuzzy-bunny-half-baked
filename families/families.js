@@ -1,4 +1,5 @@
 import { checkAuth, deleteBunny, getFamilies, logout } from '../fetch-utils.js';
+import { renderFamily } from '../render.utils.js';
 
 checkAuth();
 
@@ -9,10 +10,35 @@ logoutButton.addEventListener('click', () => {
     logout();
 });
 
-function displayFamilies() {
+async function displayFamilies() {
     // fetch families from supabase
+    const families = await getFamilies();
     // clear out the familiesEl
+    familiesEl.textContent = '';
     // loop through each family and for each family:
+    for (let family of families) {
+        const familyEl = renderFamily(family);
+        const bunniesEl = document.createElement('div');
+
+        bunniesEl.classList.add('bunnies');
+
+        for (let bunny of family.fuzzy_bunnies) {
+            const bunnyEl = document.createElement('div');
+            bunnyEl.classList.add('bunny');
+            bunnyEl.textContent = bunny.name;
+
+            bunnyEl.addEventListener('click', async () => {
+                await deleteBunny(bunny.id);
+                displayFamilies();
+            });
+
+            bunniesEl.append(bunnyEl);
+        }
+        // for (let bunny of fa)
+        // for (let)
+        familyEl.append(bunniesEl);
+        familiesEl.append(familyEl);
+    }
     // create three elements for each family, one for the whole family, one to hold the name, and one to hold the bunnies
     // your HTML Element should look like this:
     // <div class="family">
