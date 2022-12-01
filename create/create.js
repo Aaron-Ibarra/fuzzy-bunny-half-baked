@@ -1,4 +1,4 @@
-import { createBunny, getFamilies, checkAuth, logout } from '../fetch-utils.js';
+import { createBunny, getFamilies, checkAuth, logout, redirectIfLoggedIn } from '../fetch-utils.js';
 
 const form = document.querySelector('.bunny-form');
 const selectEl = document.querySelector('select');
@@ -9,10 +9,17 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     // get the name and family id from the form
+    const data = new FormData(form);
 
+    const name = data.get('bunny-name');
+    const family = data.get('family-id');
     // use createBunny to create a bunny with this name and family id
-
+    await createBunny({
+        name: name,
+        family_id: family,
+    });
     form.reset();
+    location.replace('../families');
 });
 
 window.addEventListener('load', async () => {
